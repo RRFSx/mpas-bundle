@@ -3,6 +3,8 @@ setenv OPT /glade/work/jedipara/cheyenne/opt/modules
 module purge
 module use $OPT/modulefiles/core
 module load jedi/intel-impi
+module load json
+module load json-schema-validator
 unalias ecbuild
 set ecb = `which ecbuild`
 alias ecbuild "$ecb  --toolchain=/glade/work/miesch/jedi/jedi-cmake/cmake/Toolchains/jcsda-Cheyenne-Intel.cmake"

@@ -3,6 +3,8 @@ setenv OPT /glade/work/jedipara/cheyenne/opt/modules
 module purge
 module use $OPT/modulefiles/core
 module load jedi/gnu-openmpi
+module load json
+module load json-schema-validator
 unalias ecbuild
 #setenv LOCAL_PATH_JEDI_TESTFILES /glade/u/home/maryamao/JEDI_test_files
 git lfs install
