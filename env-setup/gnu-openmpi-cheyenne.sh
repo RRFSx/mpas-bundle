@@ -5,6 +5,7 @@ module use $OPT/modulefiles/core
 module load jedi/gnu-openmpi
 module load json
 module load json-schema-validator
+module load atlas/ecmwf-0.29.0 # temp. patch until JEDI stack recovers
 unalias ecbuild
 #export LOCAL_PATH_JEDI_TESTFILES=/glade/u/home/maryamao/JEDI_test_files
 git lfs install
