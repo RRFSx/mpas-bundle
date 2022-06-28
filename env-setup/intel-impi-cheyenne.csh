@@ -2,7 +2,7 @@ source /etc/profile.d/modules.csh
 setenv OPT /glade/work/jedipara/cheyenne/opt/modules
 module purge
 module use $OPT/modulefiles/core
-module load jedi/intel-impi
+module load jedi/intel-impi/19.1.1
 module load json
 module load json-schema-validator
 unalias ecbuild
