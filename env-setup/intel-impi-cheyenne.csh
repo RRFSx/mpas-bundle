@@ -5,6 +5,7 @@ module use $OPT/modulefiles/core
 module load jedi/intel-impi/19.1.1
 module load json
 module load json-schema-validator
+module load atlas/ecmwf-0.29.0
 unalias ecbuild
 set ecb = `which ecbuild`
 #alias ecbuild "$ecb  --toolchain=/glade/work/miesch/jedi/jedi-cmake/cmake/Toolchains/jcsda-Cheyenne-Intel.cmake"
