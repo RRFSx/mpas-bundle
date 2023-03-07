@@ -76,8 +76,10 @@ branch_checkout (REPO_DIR_NAME ufo-data
 
 set(MPAS_DOUBLE_PRECISION "ON" CACHE STRING "MPAS-Model: Use double precision 64-bit Floating point.")
 set(MPAS_CORES init_atmosphere atmosphere CACHE STRING "MPAS-Model: cores to build.")
-ecbuild_bundle( PROJECT MPAS GIT "https://github.com/JCSDA-internal/MPAS-Model.git" BRANCH release-stable UPDATE)
-ecbuild_bundle( PROJECT mpas-jedi GIT "https://github.com/JCSDA-internal/mpas-jedi"  BRANCH develop UPDATE)
+ecbuild_bundle( PROJECT MPAS      GIT "https://github.com/JCSDA-internal/MPAS-Model.git" BRANCH release-stable UPDATE)
+option(BUNDLE_SKIP_SACA "Don't build saca"  "ON") # Skip saca build unless user passes -DBUNDLE_SKIP_SACA=OFF
+ecbuild_bundle( PROJECT saca      GIT "https://github.com/liujake/SACA.git"              BRANCH develop UPDATE)
+ecbuild_bundle( PROJECT mpas-jedi GIT "https://github.com/JCSDA-internal/mpas-jedi"      BRANCH develop UPDATE)
 
 # same procedure for mpas-jedi-data
 find_branch_name(REPO_DIR_NAME mpas-jedi)
