@@ -9,7 +9,7 @@ module load miniconda/3.9.12
 module load ecflow/5.8.4
 module load mysql/8.0.31
 
-module use /glade/work/epicufsrt/contrib/spack-stack/spack-stack-1.3.1/envs/unified-env/install/modulefiles/Core
+module use /glade/work/epicufsrt/contrib/spack-stack/spack-stack-1.4.0/envs/unified-env-v2/install/modulefiles/Core
 module load stack-intel/19.1.1.217
 module load stack-intel-mpi/2019.7.217
 module load stack-python/3.9.12
