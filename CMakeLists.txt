@@ -21,8 +21,16 @@ find_package( ecbuild 3.5 REQUIRED HINTS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CUR
 include( ecbuild_bundle )
 ecbuild_bundle_initialize()
 
-ecbuild_bundle( PROJECT jedicmake GIT "https://github.com/JCSDA-internal/jedi-cmake.git" BRANCH develop UPDATE RECURSIVE )
-include( jedicmake/cmake/Functions/git_functions.cmake )
+# Use external jedi-cmake or build in bundle
+if(DEFINED ENV{jedi_cmake_ROOT})
+  include( $ENV{jedi_cmake_ROOT}/share/jedicmake/Functions/git_functions.cmake )
+  list( APPEND CMAKE_MODULE_PATH $ENV{jedi_cmake_ROOT}/share/jedicmake/Modules )
+  message (INFO "CMAKE_MODULE_PATH")
+else()
+  ecbuild_bundle( PROJECT jedicmake GIT "https://github.com/jcsda-internal/jedi-cmake.git" BRANCH develop UPDATE RECURSIVE )
+  include( jedicmake/cmake/Functions/git_functions.cmake )
+  list( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/jedicmake/CMakeModules/Modules )
+endif()
 
 option(BUNDLE_SKIP_ECKIT "Don't build eckit" "ON" ) # Skip eckit build unless user passes -DBUNDLE_SKIP_ECKIT=OFF
 option(BUNDLE_SKIP_FCKIT "Don't build fckit" "ON" ) # Skip eckit build unless user passes -DBUNDLE_SKIP_FCKIT=OFF
@@ -74,8 +82,12 @@ branch_checkout (REPO_DIR_NAME ufo-data
                  BRANCH ${GIT_BRANCH_FUNC})
 
 
+# Find external ESMF for mpas-model (optional)
+find_package(ESMF 8.3.0 MODULE)
+
 set(MPAS_DOUBLE_PRECISION "ON" CACHE STRING "MPAS-Model: Use double precision 64-bit Floating point.")
 set(MPAS_CORES init_atmosphere atmosphere CACHE STRING "MPAS-Model: cores to build.")
+
 ecbuild_bundle( PROJECT MPAS      GIT "https://github.com/JCSDA-internal/MPAS-Model.git" BRANCH release-stable UPDATE )
 option(BUNDLE_SKIP_SACA "Don't build saca"  "ON") # Skip saca build unless user passes -DBUNDLE_SKIP_SACA=OFF
 ecbuild_bundle( PROJECT saca      GIT "https://github.com/liujake/SACA.git"              BRANCH develop UPDATE )
