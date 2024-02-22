@@ -8,29 +8,50 @@ which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
 #    cd /somewhere/to/store/source/code
 #    git clone https://github.com/JCSDA-internal/mpas-bundle.git
 #
-#    # (If building on Cheyenne)
+#    # (If building on Derecho)
 #    source mpas-bundle/env-setup/<desired compiler-mpi script>
+#    # scripts are either 'gnu-derecho.[c]sh' or intel-derecho.[c]sh'
 #
 #    cd /somewhere/to/build
-#    ecbuild /somewhere/to/store/source/code/mpas-bundle
-#    make -j4
+#    cmake /somewhere/to/store/source/code/mpas-bundle
+#
+#    # Due to resource limitations on derecho it is recommended to build and run ctest
+#    # on a compute node.
+#    # This can be done via an interactive session, or by submitting a batch job.
+#
+#    # To build and run ctest via batch jobs:
+#    # 1. Create the batch file to build the software and submit it
+#    ../mpas-bundle/env-setup/run_make.bundle.sh -A <acct> -c <compiler>
+#    # <acct> is the account to bill, e.g. nmmm0015
+#    # compiler is either gnu or intel
+#    # Use -l to have run_make.bundle.sh wait for the batch job to start, and to show progress.
+#    # run run_make.bundle.sh without any parameters to see full list of options
+#
+#    # 2. Create the batch file to run ctest, and submit it
+#    ../mpas-bundle/env-setup/run_make.bundle.sh -A <acct> -x ctest [-c <compiler>]
+#
+#    # Due to heavily varying (and unpredictable) wait times between submitting a job and it actually running
+#    # on Derecho it is not advised to use interactive sessions to build mpas-bundle.
+#
+#    # To build and run ctest via an interactive session,
+#    # start a session, then build the software, then run ctest:
+#    # 1. start a session:
+#    qsub -A nmmm0015 -N cc-mpas-bundle -q main -l walltime=03:00:00 -l select=1:ncpus=8 -I
+#    # 2. build the software:
+#    source ../mpas-bundle/env-setup/<compiler-script> # same script you used above
+#    make -j8
+#    # 3. run ctest
+#    cd mpas-jedi
+#    ctest
 
-The ecbuild command above will clone all the source code for the projects defined in the
+The cmake command above will clone all the source code for the projects defined in the
 CMakeLists.txt in the bundle and the make command will build them all.
 
-The default build-type is 'release'. For a debug build, add '--build=debug' to the ecbuild
+The default build-type is 'release'. For a debug build, add '-DCMAKE_BUILD_TYPE=Debug' to the cmake
 command line.
 
 To work with a different branch than the default for a given project, the branch must be
 modified in the CMakeLists.txt for the bundle.
-
-Note: ecbuild accepts all cmake flags, for example, compilers can be selected with:
-    ecbuild -DCMAKE_CXX_COMPILER=/path/to/gcc-7.2/bin/g++ ${SRC}
-
-To run the mpas-jedi ctests (from build directory):
-
-    cd mpasjedi
-    ctest
 
 
 --- Working with the code ---
@@ -38,13 +59,13 @@ To run the mpas-jedi ctests (from build directory):
 The CMakeLists.txt file in this directory contains the list of the repositories included
 in the bundle and the branch to be used. The branch specified in the CMakeLists.txt is
 the one that will be compiled. When working with you own branch, the should be changed in
-the CMakeLists.txt file but it is not necessary to re-run ecbuild, make is enough.
+the CMakeLists.txt file but it is not necessary to re-run cmake, make is enough.
 
 After the first build, changes in the code can be tested by re-running only
-(from build directory):
+(from build directory in an interactive session on a compute node):
 
     make -j4
-    cd mpasjedi
+    cd mpas-jedi
     ctest
 
 By default, make will not update your local repository from the remote. To update all repositories
