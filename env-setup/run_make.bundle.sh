@@ -25,7 +25,7 @@ COMPILER=""
 # vars for creating the batch script
 EXEC=""
 DEFAULT_EXEC="make"
-NTHREADS=8
+NTHREADS=32
 
 # vars for controlling this script
 RUN=""
