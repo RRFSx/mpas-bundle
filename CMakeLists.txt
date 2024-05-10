@@ -63,7 +63,7 @@ find_package(ESMF 8.3.0 MODULE)
 set(MPAS_DOUBLE_PRECISION "ON" CACHE STRING "MPAS-Model: Use double precision 64-bit Floating point.")
 set(MPAS_CORES init_atmosphere atmosphere CACHE STRING "MPAS-Model: cores to build.")
 
-ecbuild_bundle( PROJECT MPAS      GIT "https://github.com/amstokely/MPAS-Model.git" BRANCH atmosphere/MPAS-A_PIO_cmake-v8.1.0 UPDATE )
+ecbuild_bundle( PROJECT MPAS      GIT "https://github.com/amstokely/MPAS-Model.git" BRANCH atmosphere/MPAS-A_PIO_cmake-v8.1.0_mpas-jedi_streams UPDATE )
 option(BUNDLE_SKIP_SACA "Don't build saca"  "ON") # Skip saca build unless user passes -DBUNDLE_SKIP_SACA=OFF
 ecbuild_bundle( PROJECT saca      GIT "https://github.com/liujake/SACA.git"              BRANCH develop UPDATE )
 option(ENABLE_MPAS_JEDI_DATA "Obtain mpas-jedi test data from mpas-jedi-data repository (vs tarball)" ON)
