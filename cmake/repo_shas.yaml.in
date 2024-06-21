@@ -1,0 +1,19 @@
+repositories:
+  oops:
+    sha: @oops_SHA@
+  saber:
+    sha: @saber_SHA@
+  ioda:
+    sha: @ioda_SHA@
+  ioda-data:
+    sha: @ioda-data_SHA@
+  ufo:
+    sha: @ufo_SHA@
+  ufo-data:
+    sha: @ufo-data_SHA@
+  crtm:
+    sha: @crtm_SHA@
+  mpas-jedi-data:
+    sha: @mpas-jedi-data_SHA@
+
+

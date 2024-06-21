@@ -116,6 +116,7 @@ function(get_commit_sha_before_date
             OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     if (commit_sha)
+	string(REGEX REPLACE "\"|\'""" commit_sha ${commit_sha})
         set(${result_var} ${commit_sha} PARENT_SCOPE)
     else()
         message(FATAL_ERROR "Failed to get the latest commit SHA made before ${before_date} for ${branch} from ${repo_url}")
