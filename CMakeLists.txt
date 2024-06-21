@@ -17,12 +17,36 @@ set( ECBUILD_DEFAULT_BUILD_TYPE Debug CACHE STRING "ECBuild default build type" 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
+set( BEFORE_DATE CACHE STRING "" )
+if(NOT CACHE{BEFORE_DATE})
+	string(TIMESTAMP BEFORE_DATE "%Y-%m-%d")
+endif()
 find_package( ecbuild 3.5 REQUIRED HINTS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../ecbuild )
 include( ecbuild_bundle )
+include( ${CMAKE_SOURCE_DIR}/cmake/git_utils.cmake )
 ecbuild_bundle_initialize()
 ecbuild_add_fortran_flags(-fcheck=all BUILD Debug)
-
 # Use external jedi-cmake or build in bundle
+set( DEVELOP_REPOSITORIES oops saber crtm ioda-data ioda ufo-data ufo mpas-jedi-data )
+set( DEVELOP_REPOSITORY_URLS
+     "https://github.com/JCSDA-internal/oops.git"
+     "https://github.com/JCSDA-internal/saber.git"
+     "https://github.com/JCSDA/CRTMv3.git"
+     "https://github.com/JCSDA-internal/ioda-data.git"
+     "https://github.com/JCSDA-internal/ioda.git"
+     "https://github.com/JCSDA-internal/ufo-data.git"
+     "https://github.com/JCSDA-internal/ufo.git"
+     "https://github.com/JCSDA-internal/mpas-jedi-data.git"
+)
+list(LENGTH DEVELOP_REPOSITORY_URLS NUM_DEVELOP_REPOS)
+set( REPO_INDEX 0 )
+while(${REPO_INDEX} LESS ${NUM_DEVELOP_REPOS})
+    list(GET DEVELOP_REPOSITORY_URLS ${REPO_INDEX} REPO_URL)
+    list(GET DEVELOP_REPOSITORIES ${REPO_INDEX} REPO_NAME)
+    get_commit_sha_before_date(${REPO_URL} ${CMAKE_SOURCE_DIR}/${REPO_NAME} develop ${BEFORE_DATE} ${REPO_NAME}_SHA)
+    math(EXPR REPO_INDEX "${REPO_INDEX} + 1")
+endwhile ()
+
 if(DEFINED ENV{jedi_cmake_ROOT})
   include( $ENV{jedi_cmake_ROOT}/share/jedicmake/Functions/git_functions.cmake )
   list( APPEND CMAKE_MODULE_PATH $ENV{jedi_cmake_ROOT}/share/jedicmake/Modules )
@@ -46,15 +70,15 @@ ecbuild_bundle( PROJECT ropp-ufo  GIT "https://github.com/JCSDA-internal/ropp-te
 option(BUNDLE_SKIP_RTTOV "Don't build rttov"  "ON") # Skip rttov build unless user passes -DBUNDLE_SKIP_RTTOV=OFF
 ecbuild_bundle( PROJECT rttov     GIT "https://github.com/JCSDA-internal/rttov.git"       BRANCH develop UPDATE )
 
-ecbuild_bundle( PROJECT oops      GIT "https://github.com/JCSDA-internal/oops.git"        TAG 3a5b35668ab4455f4094c069dd148e7352b7911e )
-ecbuild_bundle( PROJECT saber     GIT "https://github.com/JCSDA-internal/saber.git"       TAG a2c8e1c78faf045613b7a5c15627e31fe947dc9f )
-ecbuild_bundle( PROJECT crtm      GIT "https://github.com/JCSDA/CRTMv3.git"               TAG ec3fa012dc5a6a1d7657dd857eb2a8362ec926d9 )
+ecbuild_bundle( PROJECT oops      GIT "https://github.com/JCSDA-internal/oops.git"        TAG oops_SHA )
+ecbuild_bundle( PROJECT saber     GIT "https://github.com/JCSDA-internal/saber.git"       TAG saber_SHA )
+ecbuild_bundle( PROJECT crtm      GIT "https://github.com/JCSDA/CRTMv3.git"               TAG crtm_SHA )
 option(ENABLE_IODA_DATA "Obtain ioda test data from ioda-data repository (vs tarball)" ON)
-ecbuild_bundle( PROJECT ioda-data GIT "https://github.com/jcsda-internal/ioda-data.git"   TAG 68a4bd3423836a891d589e978e37cb1d4410a2fe )
-ecbuild_bundle( PROJECT ioda      GIT "https://github.com/jcsda-internal/ioda.git"        TAG e2217b6537223289f9050ea079469c54cc381463 )
+ecbuild_bundle( PROJECT ioda-data GIT "https://github.com/jcsda-internal/ioda-data.git"   TAG ioda-data_SHA )
+ecbuild_bundle( PROJECT ioda      GIT "https://github.com/jcsda-internal/ioda.git"        TAG ioda_SHA )
 option(ENABLE_UFO_DATA "Obtain ufo test data from ufo-data repository (vs tarball)" ON)
-ecbuild_bundle( PROJECT ufo-data  GIT "https://github.com/jcsda-internal/ufo-data.git"    TAG 30b969b450a9b51940101e37c6ef86ef91e8ac09 )
-ecbuild_bundle( PROJECT ufo       GIT "https://github.com/jcsda-internal/ufo.git"         TAG 088d28d0133a8d3529c842fec33b8a8aa6f0b1cb )
+ecbuild_bundle( PROJECT ufo-data  GIT "https://github.com/jcsda-internal/ufo-data.git"    TAG ufo-data_SHA )
+ecbuild_bundle( PROJECT ufo       GIT "https://github.com/jcsda-internal/ufo.git"         TAG ufo_SHA )
 
 
 # Find external ESMF for mpas-model (optional)
@@ -67,7 +91,7 @@ ecbuild_bundle( PROJECT MPAS      GIT "https://github.com/amstokely/MPAS-Model" 
 option(BUNDLE_SKIP_SACA "Don't build saca"  "ON") # Skip saca build unless user passes -DBUNDLE_SKIP_SACA=OFF
 ecbuild_bundle( PROJECT saca      GIT "https://github.com/liujake/SACA.git"              BRANCH develop UPDATE )
 option(ENABLE_MPAS_JEDI_DATA "Obtain mpas-jedi test data from mpas-jedi-data repository (vs tarball)" ON)
-ecbuild_bundle( PROJECT mpas-jedi-data  GIT "https://github.com/jcsda-internal/mpas-jedi-data.git" TAG cd9821633126cb0b4f44d2d3952cd7436f3667db )
+ecbuild_bundle( PROJECT mpas-jedi-data  GIT "https://github.com/jcsda-internal/mpas-jedi-data.git" TAG mpas-jedi-data_SHA )
 ecbuild_bundle( PROJECT mpas-jedi GIT "https://github.com/JCSDA-internal/mpas-jedi"      BRANCH feature/MPAS-Model_v8.1 )
 
 
