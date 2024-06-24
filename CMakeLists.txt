@@ -17,9 +17,9 @@ set( ECBUILD_DEFAULT_BUILD_TYPE Debug CACHE STRING "ECBuild default build type" 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
-set( BEFORE_DATE CACHE STRING "" )
-if(NOT CACHE{BEFORE_DATE})
-	string(TIMESTAMP BEFORE_DATE "%Y-%m-%d")
+set( SNAPSHOT_DATE CACHE STRING "")
+if( NOT SNAPSHOT_DATE )
+    string(TIMESTAMP SNAPSHOT_DATE "%Y%m%d")
 endif()
 find_package( ecbuild 3.5 REQUIRED HINTS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../ecbuild )
 include( ecbuild_bundle )
@@ -43,7 +43,7 @@ set( REPO_INDEX 0 )
 while(${REPO_INDEX} LESS ${NUM_DEVELOP_REPOS})
     list(GET DEVELOP_REPOSITORY_URLS ${REPO_INDEX} REPO_URL)
     list(GET DEVELOP_REPOSITORIES ${REPO_INDEX} REPO_NAME)
-    get_commit_sha_before_date(${REPO_URL} ${CMAKE_SOURCE_DIR}/${REPO_NAME} develop ${BEFORE_DATE} ${REPO_NAME}_SHA)
+    find_snapshot_commit_sha(${REPO_URL} ${CMAKE_SOURCE_DIR}/${REPO_NAME} origin develop ${SNAPSHOT_DATE} ${REPO_NAME}_SHA)
     math(EXPR REPO_INDEX "${REPO_INDEX} + 1")
 endwhile ()
 
@@ -103,5 +103,5 @@ branch_checkout (REPO_DIR_NAME mpas-jedi-data
 	BRANCH develop ) #tmp solution for fetching mpas-jedi-data repo. 
 			 #This is required because the mpas-jedi dev branch is not being used.
 ecbuild_bundle_finalize()
-configure_file( ${CMAKE_SOURCE_DIR}/cmake/repo_shas.yaml.in ${CMAKE_BINARY_DIR}/repo_shas_6-10.yaml @ONLY )
+configure_file( ${CMAKE_SOURCE_DIR}/cmake/repo_shas.yaml.in ${CMAKE_BINARY_DIR}/repo_shas_${SNAPSHOT_DATE}.yaml @ONLY )
 
