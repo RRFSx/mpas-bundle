@@ -7,6 +7,9 @@
 # MPAS/JEDI bundle
 #
 
+#
+# Usage: cmake <mpas-bundle src dir> -DCMAKE_BUILD_TYPE=RelWithDebINfo -DCMAKE_VERBOSE_MAKEFILE=ON -DSNAPSHOT_DATE=2024-06-01 -DMPAS_DOUBLE_PRECISION=OFF
+
 cmake_minimum_required( VERSION 3.14 )
 project( mpas-bundle VERSION 1.0.0 LANGUAGES C CXX Fortran )
 
