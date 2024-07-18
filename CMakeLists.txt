@@ -46,6 +46,7 @@ option(BUNDLE_SKIP_RTTOV "Don't build rttov"  "ON") # Skip rttov build unless us
 ecbuild_bundle( PROJECT rttov     GIT "https://github.com/JCSDA-internal/rttov.git"       BRANCH develop UPDATE )
 
 ecbuild_bundle( PROJECT oops      GIT "https://github.com/JCSDA-internal/oops.git"        BRANCH develop UPDATE )
+ecbuild_bundle( PROJECT vader     GIT "https://github.com/jcsda-internal/vader.git"       BRANCH develop UPDATE )
 ecbuild_bundle( PROJECT saber     GIT "https://github.com/JCSDA-internal/saber.git"       BRANCH develop UPDATE )
 ecbuild_bundle( PROJECT crtm      GIT "https://github.com/JCSDA/CRTMv3.git"               BRANCH develop UPDATE )
 option(ENABLE_IODA_DATA "Obtain ioda test data from ioda-data repository (vs tarball)" ON)
