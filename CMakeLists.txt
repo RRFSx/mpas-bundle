@@ -23,7 +23,6 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 find_package( ecbuild 3.5 REQUIRED HINTS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../ecbuild )
 include( ecbuild_bundle )
 ecbuild_bundle_initialize()
-ecbuild_add_fortran_flags(-fcheck=all BUILD Debug)
 # Use external jedi-cmake or build in bundle
 
 if(DEFINED ENV{jedi_cmake_ROOT})
